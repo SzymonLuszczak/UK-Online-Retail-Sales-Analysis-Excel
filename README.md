@@ -21,11 +21,20 @@ Before building reports, the raw dataset (`Online Retail Sample.csv`) underwent 
 - **Data Visualization:** Bar charts, line trends, and KPI summary cards designed for quick executive reading.
 
 ## 4. Key Business Insights
-*(Uzupełnij swoimi konkretnymi wynikami z pliku Excela — poniżej przykładowe punkty dopasowane do tego zbioru):*
 - **Geographic Concentration:** The vast majority of orders and revenue originate from the **United Kingdom**, with international sales concentrated in key European markets (e.g., Germany, France, EIRE, Netherlands).
 - **Top-Performing Products:** A small group of giftware and home decor items drives a disproportionate share of total order volume.
 - **Order Cancellations & Returns:** Tracking negative quantities (`InvoiceNo` starting with `C`) revealed return rates that directly impact net revenue.
 - **Customer Purchasing Patterns:** Repeat business customers place bulk orders with significantly higher Average Order Value (AOV) compared to single-item retail buyers.
 
-## 5. Excel Dashboard & Pivot Charts Preview
-*(Tutaj wklej zrzut ekranu swojego arkusza/dashboardu z Excela)*
+## 5. Excel Dashboard & Analysis Previews
+
+### Executive Dashboard
+![Excel Dashboard](Excel.Portfolio_dashboard.png)
+
+### Regional Sales Breakdown
+![Regional Analysis](Excel.Portfolio_Regions.png)
+
+### Data Preparation & Pivot Tables
+![Data Overview 1](Excel.Portfolio1.png)
+![Data Overview 2](Excel.Portfolio2.png)
+![Data Overview 3](Excel.Portfolio3.png)
