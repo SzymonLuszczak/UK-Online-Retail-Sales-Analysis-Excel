@@ -34,7 +34,7 @@ Before building reports, the raw dataset (`Online Retail Sample.csv`) underwent 
 ### Regional Sales Breakdown
 ![Regional Analysis](Excel.Portfolio_Regions.png)
 
-### Data Preparation & Pivot Tables
+### Data Preparation & Feature Engineering (XLOOKUP & Calculated Columns)
 ![Data Overview 1](Excel.Portfolio1.png)
 ![Data Overview 2](Excel.Portfolio2.png)
 ![Data Overview 3](Excel.Portfolio3.png)
