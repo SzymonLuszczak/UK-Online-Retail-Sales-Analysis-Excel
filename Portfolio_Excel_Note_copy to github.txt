@@ -1,0 +1,63 @@
+# 📊 Analiza Sprzedaży E-Commerce (Online Retail Dataset) — Projekt Portfolio (Excel)
+• Źródło pliku (GitHub): Online Retail Sample.csv z oficjalnego repozytorium: IBM / customer_pos_analytics (próbka 3 066 transakcji z 1 grudnia 2010 r.).
+https://github.com/IBM/customer_pos_analytics/blob/master/data/Online%20Retail%20Sample.csv
+• Zbiór bazowy: Oryginalny zbiór Online Retail Dataset z repozytorium UCI Machine Learning Repository (rzeczywiste dane transakcyjne brytyjskiego sklepu internetowego zarejestrowanego w Wielkiej Brytanii).
+
+
+## 1. Cel projektu i opis zbioru danych
+Celem projektu była kompleksowa analiza sprzedaży dziennej brytyjskiego sklepu internetowego (detal i hurt z upominkami oraz dekoracjami świątecznymi) na podstawie surowego pliku transakcyjnego. Projekt obejmuje pełny proces pracy analityka: od oczyszczenia „brudnych” danych z systemu POS, przez wzbogacenie ich za pomocą słowników i funkcji logicznych, aż po stworzenie interaktywnego dashboardu z wnioskami biznesowymi.
+
+* **Źródło danych:** Zbiór *Online Retail Sample* pobrany z repozytorium IBM / UCI Machine Learning Repository (`Online Retail Sample.csv`).
+* **Zakres danych:** 3 066 rekordów transakcyjnych z jednego dnia w szczycie sezonu przedświątecznego (1 grudnia 2010 r., godz. 08:26–17:24).
+* **Waluta:** Funt brytyjski (GBP).
+
+---
+
+## 2. Etap 1: Czyszczenie i przygotowanie danych (Data Cleaning & ETL w Excelu)
+Surowy plik CSV zawierał szereg błędów importu oraz pozycji technicznych, które mogłyby zafałszować wyniki finansowe. W arkuszu głównym (`Date`) przeprowadziłem następujące kroki:
+
+1. **Naprawa błędów formatowania regionalnego (`UnitPrice`):**
+   Polski Excel błędnie zinterpretował angielskie ceny z kropką dziesiętną jako daty (np. `2.55` -> `lut.55`). Za pomocą zagnieżdżonych formuł tekstowych i dat (`JEŻELI.BŁĄD`, `JEŻELI`, `DZIEŃ`, `MIESIĄC`, `ROK`, `PODSTAW`) odzyskałem poprawne wartości liczbowe wszystkich cen.
+2. **Wyliczenie wartości transakcji (`Revenue`) i formatowanie warunkowe:**
+   Dodałem kolumnę `Revenue` (`=D2*F2`, czyli `Quantity * UnitPrice`) i zastosowałem skalę kolorów (formatowanie warunkowe), aby natychmiast wyróżnić wysokie zamówienia hurtowe (ciemna zieleń) oraz ujemne zwroty (kolor czerwony).
+3. **Ekstrakcja godziny zakupu (`Hour`):**
+   Wyodrębniłem godzinę złożenia zamówienia za pomocą funkcji `=GODZINA(E2)`, umożliwiając analizę obciążenia sklepu w ciągu dnia.
+4. **Separacja sprzedaży od zwrotów (`Transactions_Type`):**
+   Zamiast usuwać ujemne wartości w kolumnie `Quantity` (faktury zaczynające się od litery `"C"`), utworzyłem kolumnę kategoryzującą:
+   ```excel
+   =JEŻELI(D2>0; "Sale"; "Return")
+   ```
+   Pozwoliło to precyzyjnie policzyć sprzedaż brutto, wartość zwrotów oraz przychód netto.
+5. **Odfiltrowanie opłat technicznych i korekt (`Item_Category`):**
+   W zbiorze znajdowały się kody niezwiązane ze sprzedażą towarów, takie jak `POST` (opłata pocztowa), `DOT` (*Dotcom Postage* – pojedyncza pozycja na kwotę 607,49 GBP), `D` (rabaty) oraz `M` (korekty ręczne). Oddzieliłem je formułą:
+   ```excel
+   =JEŻELI(LUB(B2="POST"; B2="D"; B2="M"; B2="DOT"); "Fee / Adjustment"; "Product")
+   ```
+   Dzięki temu opłaty za przesyłkę nie zawyżyły przychodu produktowego.
+6. **Wzbogacenie danych za pomocą słownika regionów (`X.WYSZUKAJ` / `XLOOKUP`):**
+   Utworzyłem osobny, chroniony przed edycją arkusz słownikowy `Regions` przypisujący 7 występujących krajów do szerszych obszarów geograficznych (`Domestic (UK)`, `Western Europe`, `Nordics`, `British Isles`, `Asia-Pacific`) i połączyłem go z tabelą główną:
+   ```excel
+   =X.WYSZUKAJ(H2; Regions!$A$2:$A$8; Regions!$B$2:$B$8)
+   ```
+
+---
+
+## 3. Etap 2: Wizualizacja i Dashboard
+Na osobnym arkuszu (`Dashboard`) zbudowałem przejrzysty widok raportowy (pozbawiony linii siatki i nagłówków arkusza) oparty na powiązanych Tabelach Przestawnych:
+* **Podsumowanie finansowe (Sale vs. Return):** Zestawienie sprzedaży brutto, wartości zwrotów oraz czystego przychodu netto.
+* **Rozkład sprzedaży według godzin (`Sales Revenue by Hour`):** Wykres kolumnowy obrazujący szczyty aktywności klientów w ciągu dnia.
+* **Struktura geograficzna sprzedaży (`Country`):** Procentowy udział rynku krajowego oraz rynków eksportowych.
+
+---
+
+## 4. Kluczowe wnioski biznesowe (Key Business Insights)
+* **Wysoka rentowność i minimalna skala zwrotów:** Przychód netto ze sprzedaży produktów wyniósł **£61 844,03** (przy sprzedaży brutto **£62 142,76** i zwrotach na poziomie zaledwie **-£298,73**, co daje bardzo niską stopę zwrotów wynoszącą **0,48%**).
+* **Popołudniowy szczyt sprzedaży:** Najwyższy przychód wygenerowano o godzinie **16:00 (£10 545,66 / 17,0% dziennego obrotu)**, a kolejne szczyty przypadły na **12:00 (£8 862,32)** oraz **09:00 (£7 793,19)**. Godziny popołudniowe (12:00–16:00) odpowiadały za ponad połowę dziennej sprzedaży.
+* **Dominacja rynku brytyjskiego i lider eksportu:** Rynek krajowy (**United Kingdom**) wygenerował **92,72%** przychodu. Wśród rynków zagranicznych (łącznie **7,28%**) zdecydowanym liderem była **Norwegia (3,89%)**, wyprzedzając Francję (**1,29%**) oraz Irlandię / EIRE (**0,84%**).
+* **Ograniczenia danych i rekomendacje:** Ponieważ analizowany zbiór obejmuje pojedynczy dzień w okresie przedświątecznym, do potwierdzenia długoterminowej sezonowości oraz retencji klientów (w tym porównania klientów zarejestrowanych z kupującymi jako „gość”) niezbędna jest analiza danych wielomiesięcznych.
+
+---
+
+## 5. Wykorzystane narzędzia i funkcje
+* **Narzędzie:** Microsoft Excel (Microsoft 365)
+* **Funkcje i techniki:** `X.WYSZUKAJ` (`XLOOKUP`), `JEŻELI` (`IF`), `LUB` (`OR`), `GODZINA` (`HOUR`), `JEŻELI.BŁĄD` (`IFERROR`), `PODSTAW` (`SUBSTITUTE`), Tabele Przestawne (Pivot Tables), Formatowanie Warunkowe (Color Scales), Ochrona Arkusza, Wykresy Kolumnowe.
