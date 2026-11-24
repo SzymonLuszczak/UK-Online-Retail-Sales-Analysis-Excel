@@ -1,4 +1,4 @@
-📂 **Źródło danych:** [Online Retail Sample.csv (IBM / customer_pos_analytics)](https://github.com) *(próbka 3 066 transakcji z 1 grudnia 2010 r.)*
+📂 **Źródło danych:** [Online Retail Sample.csv – repozytorium IBM (folder data)](https://github.com) *(próbka 3 066 transakcji z 1 grudnia 2010 r.)*
 # UK Online Retail Sales Analysis – Microsoft Excel
 
 ## 1. Business Problem & Project Goal
